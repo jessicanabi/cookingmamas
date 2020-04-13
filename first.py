@@ -4,7 +4,8 @@ import os
 import requests
 
 API_KEY = 'd6138d2114b64120b05c0cbdb7c92f60'
-
+#dir_path = os.path.dirname(os.path.realpath(__file__))
+#self.CACHE_FNAME = dir_path + '/' + "cache_spoonacular.json"
 
 def read_cache(CACHE_FNAME):
     """
@@ -29,30 +30,53 @@ def write_cache(CACHE_FNAME, CACHE_DICT):
     with open(CACHE_FNAME, 'w') as f:
         json.dump(CACHE_DICT, f)
 
-#spoontacular API
-cuisine_list = ["African", "American", "British", "Cajun", "Caribbean", "Chinese", "Eastern European", "European",
-"French", "German", "Greek", "Indian", "Irish", "Italian", "Japanese", "Jewish", "Korean", "Latin American", 
-"Mediterranean", "Mexican", "Middle Eastern", "Nordic", "Southern", "Spanish", "Thai", "Vietnamese"]
+def get_cuisine(cuisine):
+    #spoontacular API
+    #cuisine_list = ["African", "American", "British", "Cajun", "Caribbean", "Chinese", "Eastern European", "European",
+    #"French", "German", "Greek", "Indian", "Irish", "Italian", "Japanese", "Jewish", "Korean", "Latin American", 
+    #"Mediterranean", "Mexican", "Middle Eastern", "Nordic", "Southern", "Spanish", "Thai", "Vietnamese"]
+    #"?apiKey=" + API_KEY + 
+    #num = '10'
+    #+ "?number" + num
+    base_url = 'https://api.spoonacular.com/'
+    endpoint = 'recipies/search'
+    params = "?cuisine" + cuisine
+    r = requests.get((base_url + endpoint + params))
+    data = json.loads(r.text)
+    print(data)
+
+#def _make_request(self, path, method='GET', endpoint=None,
+                      #query_=None, params_=None, json_=None):
+        #""" Make a request to the API """
+
+    
+    #uri = self.api_root + path
+
+        # API auth (temporary kludge)
+    #if params_:
+        #params_['apiKey'] = self.api_key
+    #else:
+        #params_ = {'apiKey': self.api_key}
+   # response = self.session.request(method, uri,
+          #                          timeout=self.timeout,
+          #                          data=query_,
+           #                         params=params_,
+           #                         json=json_)
+    #return response
 
 
-food = input("What food are you looking for?")
-while True:
-    c = input("What cuisine are you looking for?")
-    c = c[0].upper() + c[1:]
-    if c in cuisine_list:
-        cuisine = c
-        break
-    else:
-        print("Sorry, try again")
-num = '10'
-base_url = 'https://api.spoonacular.com/'
-params = "?apiKey=" + API_KEY + "?query" + food + "?cuisine" + cuisine + "?number" + num
-r = requests.get((base_url + params))
-data = json.loads(r.text)
-print(data)
+def classify_cuisine(self, cuisine):
+    
+        endpoint = "recipes/cuisine"
+        url_query = {"cuisine": cuisine}
+        url_params = {}
+        try:
+            return self._make_request(endpoint, method="POST", query_=url_query, params_=url_params
+        except:
+            print("Cuisine not found")
 
 
 #Tasty API 
 
-
+classify_cuisine("Greek")
 
